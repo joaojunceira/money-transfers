@@ -28,7 +28,7 @@
     
   * Response:
   
-   ** Success (200)
+    ** Success (200)
    
      ```json
      {
@@ -40,19 +40,24 @@
      }
      ```
       
-    ** Bad request (400)
-    
-      Used to reject bad IBAN and Currency Codes format or non-suported Currency Codes. It might also apply to a non-existing IBAN. It will reply a message describing the failure.
-      
-      ```json
-      {
-         "message":"Invalid IBAN format"
-      } 
-      ```
+     ** Bad request (400)
 
-    ** Forbidden (403)
+
+    Used to reject bad IBAN and Currency Codes format or non-suported Currency Codes. It might also apply to a non-existing IBAN. It will reply a message describing the failure.
+    
+    
+     ```json
+     {
+         "message":"Invalid IBAN format"
+     } 
+     ```
+
+     ** Forbidden (403)
    
-      Not enough money to do transfer.
+      
+    Not enough money to do transfer.
+      
+      
       
 * Create Account
 
