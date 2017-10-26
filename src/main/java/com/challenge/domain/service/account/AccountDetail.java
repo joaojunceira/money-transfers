@@ -1,18 +1,14 @@
-package com.challenge.domain.model;
+package com.challenge.domain.service.account;
 
+import com.challenge.domain.model.User;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.money.MonetaryAmount;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public @Data
-class Account {
+class AccountDetail {
 
   @Getter
   @Setter
@@ -26,7 +22,4 @@ class Account {
   @Getter
   @Setter
   private LocalDateTime lastMovement;
-  @Getter
-  @Setter
-  private List<Transfer> movements;
 }

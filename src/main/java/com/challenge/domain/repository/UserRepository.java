@@ -1,7 +1,7 @@
 package com.challenge.domain.repository;
 
-import com.challenge.domain.dto.UserDto;
+import com.challenge.domain.model.User;
 
-public abstract class UserRepository implements Repository<Long, UserDto>{
+public abstract class UserRepository implements Repository<Long, User> {
 
 }

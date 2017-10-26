@@ -1,4 +1,4 @@
-package com.challenge.domain.services;
+package com.challenge.domain.service.transfer;
 
 
 public interface TransferService {

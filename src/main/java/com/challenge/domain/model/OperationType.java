@@ -10,7 +10,7 @@ public enum OperationType {
     this.code = code;
   }
 
-  public Integer code(){
+  public Integer code() {
     return code;
   }
 }

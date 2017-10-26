@@ -1,4 +1,4 @@
-package com.challenge.domain.dto;
+package com.challenge.domain.service.user;
 
 import java.time.LocalDate;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public @Data
-class UserDto {
+class UserDetail {
 
   @Getter
   @Setter

@@ -1,4 +1,4 @@
-package com.challenge.domain.dto;
+package com.challenge.domain.service.user;
 
 import java.time.LocalDate;
 import lombok.Data;
@@ -6,11 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public @Data
-class UserDto {
+class UserCreationRequest {
 
-  @Getter
-  @Setter
-  private Long id;
   @Getter
   @Setter
   private String firstName;

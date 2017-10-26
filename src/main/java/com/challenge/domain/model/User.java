@@ -1,11 +1,14 @@
 package com.challenge.domain.model;
 
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 public @Data
 class User {
 

@@ -1,4 +1,4 @@
-package com.challenge.domain.services;
+package com.challenge.domain.service.account;
 
 import java.util.Currency;
 import lombok.Data;
