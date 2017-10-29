@@ -32,11 +32,7 @@
    
      ```json
      {
-        "id":1200000,
-        "balance":{
-           "amount":"59.95",
-           "currency":"EUR"
-        }
+        "id":1200000
      }
      ```
       
