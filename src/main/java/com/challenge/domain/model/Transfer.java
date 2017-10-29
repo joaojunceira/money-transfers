@@ -18,17 +18,14 @@ class Transfer {
   private Long id;
   @Setter
   @Getter
-  private Account source;
+  private Long sourceAccountId;
   @Setter
   @Getter
-  private Account destination;
+  private Long destinationAccountId;
   @Setter
   @Getter
   private MonetaryAmount amount;
   @Setter
   @Getter
   private LocalDateTime timestamp;
-  @Setter
-  @Getter
-  private OperationType type;
 }

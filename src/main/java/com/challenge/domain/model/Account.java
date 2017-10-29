@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @AllArgsConstructor
@@ -14,6 +15,9 @@ import lombok.Setter;
 public @Data
 class Account {
 
+  @Getter
+  @Setter
+  private Long id;
   @Getter
   @Setter
   private String iban;
@@ -26,6 +30,7 @@ class Account {
   @Getter
   @Setter
   private LocalDateTime lastMovement;
+  @NonNull
   @Getter
   @Setter
   private List<Transfer> movements;

@@ -10,10 +10,12 @@ import lombok.Setter;
 public @Data
 class RequestTransferModel {
 
+  @NotNull
   @Getter
   @Setter
   @Pattern(message = "Invalid IBAN", regexp = "^[A-Z]{2}\\d{2}(?:\\d{4}){3}\\d{4}(?:\\d\\d?)?$")
   private String source;
+  @NotNull
   @Getter
   @Setter
   @Pattern(message = "Invalid IBAN", regexp = "^[A-Z]{2}\\d{2}(?:\\d{4}){3}\\d{4}(?:\\d\\d?)?$")

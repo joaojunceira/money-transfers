@@ -1,6 +1,5 @@
 package com.challenge.domain.repository;
 
-import java.util.List;
 
 public interface Repository<K, V> {
 
@@ -8,7 +7,7 @@ public interface Repository<K, V> {
 
   V findById(K key);
 
-  List<V> findAll();
+  Iterable<V> findAll();
 
   Integer delete(K key);
 

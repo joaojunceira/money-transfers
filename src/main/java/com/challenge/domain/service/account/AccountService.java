@@ -3,7 +3,7 @@ package com.challenge.domain.service.account;
 
 public interface AccountService {
 
-  AccountDetail create(AccountRequestSpecification specification);
+  AccountDetail create(AccountRequest accountRequest);
 
   AccountDetail get(String iban);
 }

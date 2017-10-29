@@ -1,11 +1,13 @@
 package com.challenge.rest.model;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
 public class CreateAccountModel {
 
+  @NotNull
   @Getter
   @Setter
   Long userId;

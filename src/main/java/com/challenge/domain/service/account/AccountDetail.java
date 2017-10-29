@@ -12,6 +12,9 @@ class AccountDetail {
 
   @Getter
   @Setter
+  private Long id;
+  @Getter
+  @Setter
   private String iban;
   @Getter
   @Setter
