@@ -2,11 +2,12 @@ package com.challenge.infrastructure.persistence;
 
 import com.challenge.domain.model.Transfer;
 import com.challenge.domain.repository.TransferRepository;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class TransferRepositoryInMemory extends TransferRepository {
+public final class TransferRepositoryInMemory extends TransferRepository {
 
   private final ConcurrentHashMap<Long, Transfer> dataStore = new ConcurrentHashMap<>();
   private final AtomicLong idCounter = new AtomicLong();
@@ -20,13 +21,13 @@ public class TransferRepositoryInMemory extends TransferRepository {
   }
 
   @Override
-  public Transfer findById(Long key) {
-    return dataStore.get(key);
+  public Optional<Transfer> findById(Long key) {
+    return Optional.ofNullable(dataStore.get(key));
   }
 
   @Override
-  public Iterable<Transfer> findAll() {
-    return dataStore.values();
+  public Optional<Iterable<Transfer>> findAll() {
+    return Optional.ofNullable(dataStore.values());
   }
 
   @Override

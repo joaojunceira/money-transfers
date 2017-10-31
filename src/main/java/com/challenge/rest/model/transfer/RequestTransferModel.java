@@ -1,27 +1,29 @@
-package com.challenge.rest.model;
+package com.challenge.rest.model.transfer;
 
-import javax.money.MonetaryAmount;
+import com.challenge.rest.model.shared.MonetaryAmountModel;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public @Data
-class RequestTransferModel {
+@AllArgsConstructor
+@NoArgsConstructor
+public class RequestTransferModel {
 
-  @NotNull
   @Getter
   @Setter
   @Pattern(message = "Invalid IBAN", regexp = "^[A-Z]{2}\\d{2}(?:\\d{4}){3}\\d{4}(?:\\d\\d?)?$")
   private String source;
-  @NotNull
+
   @Getter
   @Setter
   @Pattern(message = "Invalid IBAN", regexp = "^[A-Z]{2}\\d{2}(?:\\d{4}){3}\\d{4}(?:\\d\\d?)?$")
   private String destination;
-  @NotNull
+
+  @NotNull(message = "Amount is empty")
   @Getter
   @Setter
-  private MonetaryAmount amount;
+  private MonetaryAmountModel amount;
 }

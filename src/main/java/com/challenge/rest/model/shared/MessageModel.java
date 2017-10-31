@@ -1,18 +1,15 @@
-package com.challenge.rest.model;
+package com.challenge.rest.model.shared;
 
-import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public @Data
-class TransferResultModel {
+public class MessageModel {
 
   @Getter
   @Setter
-  Long id;
+  private String message;
 }

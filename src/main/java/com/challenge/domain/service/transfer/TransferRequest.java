@@ -1,20 +1,16 @@
 package com.challenge.domain.service.transfer;
 
-import javax.money.MonetaryAmount;
+import java.math.BigDecimal;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 public @Data
 class TransferRequest {
 
-  @Getter
-  @Setter
   private String source;
-  @Getter
-  @Setter
+
   private String destination;
-  @Getter
-  @Setter
-  private MonetaryAmount amount;
+
+  private BigDecimal amount;
+
+  private String currency;
 }

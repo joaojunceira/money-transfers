@@ -2,11 +2,11 @@ package com.challenge.infrastructure.persistence;
 
 import com.challenge.domain.model.User;
 import com.challenge.domain.repository.UserRepository;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import lombok.Synchronized;
 
-public class UserRepositoryInMemory extends UserRepository {
+public final class UserRepositoryInMemory extends UserRepository {
 
   private final ConcurrentHashMap<Long, User> dataStore = new ConcurrentHashMap<>();
   private final AtomicLong idCounter = new AtomicLong();
@@ -20,13 +20,13 @@ public class UserRepositoryInMemory extends UserRepository {
   }
 
   @Override
-  public User findById(Long key) {
-    return dataStore.get(key);
+  public Optional<User> findById(Long key) {
+    return Optional.ofNullable(dataStore.get(key));
   }
 
   @Override
-  public Iterable<User> findAll() {
-    return dataStore.values();
+  public Optional<Iterable<User>> findAll() {
+    return Optional.ofNullable(dataStore.values());
   }
 
   @Override
