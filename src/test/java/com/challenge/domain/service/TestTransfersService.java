@@ -30,11 +30,8 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestTransfersService {
 
-  @Inject
   private UserRepository userRepository;
-  @Inject
   private AccountRepository accountsRepository;
-  @Inject
   private TransferService transferService;
 
   @Before

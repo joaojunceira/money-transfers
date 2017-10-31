@@ -3,89 +3,122 @@ package com.challenge.rest;
 import static io.restassured.RestAssured.given;
 
 import com.challenge.App;
-import com.challenge.config.RepositoryModule;
-import com.challenge.config.ServiceModule;
-import com.challenge.domain.model.Account;
-import com.challenge.domain.model.User;
-import com.challenge.domain.repository.AccountRepository;
-import com.challenge.domain.repository.UserRepository;
+import com.challenge.rest.model.account.CreateAccountModel;
 import com.challenge.rest.model.shared.MonetaryAmountModel;
 import com.challenge.rest.model.transfer.RequestTransferModel;
+import com.challenge.rest.model.user.CreateUserInput;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import io.restassured.http.ContentType;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.LinkedList;
-import javax.inject.Inject;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.JVM)
 public class TransferIntegrationTest {
 
-  @Inject
-  private UserRepository userRepository;
-  @Inject
-  private AccountRepository accountsRepository;
   private HttpServer server;
   private ObjectMapper objectMapper;
+  private String baseUserUri;
+  private String baseAccountsUri;
+  private String baseTransfersUri;
 
 
   @Before
   public void setup() throws IOException {
-
-    Injector injector = Guice.createInjector(new RepositoryModule(), new ServiceModule());
-    this.userRepository = injector.getInstance(UserRepository.class);
-    this.accountsRepository = injector.getInstance(AccountRepository.class);
-    objectMapper = new ObjectMapper();//.registerModule(new MoneyModule());
-    App app = injector.getInstance(App.class);
+    objectMapper = new ObjectMapper().findAndRegisterModules();
+    App app = new App();
     server = app.startServer();
-    User user = new User();
-    user.setFirstName("John");
-    user.setLastName("Smith");
-    user.setBirthDate(LocalDate.of(1970, 4, 1));
-    Long id = userRepository.create(user);
-    user.setId(id);
-    Account account = new Account();
-    MonetaryAmount amount = Monetary.getDefaultAmountFactory().
-        setCurrency("USD").setNumber(100L).create();
-    account.setBalance(amount);
-    account.setIban("LT601010012345678901");
-    account.setLastMovement(LocalDateTime.now(Clock.systemUTC()));
-    account.setMovements(new LinkedList<>());
-    account.setUser(user);
-    accountsRepository.create(account);
-    Account account2 = new Account();
-    account2.setBalance(amount);
-    account2.setLastMovement(LocalDateTime.now(Clock.systemUTC()));
-    account2.setMovements(new LinkedList<>());
-    account2.setUser(user);
-    account2.setIban("LT601010012345678902");
-    accountsRepository.create(account2);
+    baseUserUri = App.BASE_URI.concat("/user");
+    baseAccountsUri = App.BASE_URI.concat("/account");
+    baseTransfersUri = App.BASE_URI.concat("/transfer");
+  }
+
+  private void arrangeTestData()
+      throws JsonProcessingException {
+    Integer user = createUser();
+    createAccount(user);
+    createAccount(user);
+  }
+
+  private Integer createUser() throws JsonProcessingException {
+    CreateUserInput input = new CreateUserInput();
+    input.setFirstName("John");
+    input.setLastName("Smith");
+    input.setBirthDate(LocalDate.of(1974, 4, 25));
+    String requestBody = objectMapper.writeValueAsString(input);
+    String location = given().contentType(ContentType.JSON).body(requestBody).post(baseUserUri)
+        .then().
+            extract().header("Location");
+    return given().contentType(ContentType.JSON).get(location).then().extract().path("id");
+  }
+
+  private void createAccount(Integer userId) throws JsonProcessingException {
+    CreateAccountModel model = new CreateAccountModel();
+    model.setUserId(new Long(userId));
+    model.setCurrency("USD");
+    String body = objectMapper.writeValueAsString(model);
+    given().contentType(ContentType.JSON).body(body).post(baseAccountsUri).then().statusCode(201);
   }
 
   @Test
   public void testTransfer() throws JsonProcessingException {
-    MonetaryAmount amount = Monetary.getDefaultAmountFactory().
-        setCurrency("USD").setNumber(50L).create();
+    //Arrange
+    final String ibanSource = "LT6000000000000000000001";
+    final String ibanDestination = "LT6000000000000000000002";
+    arrangeTestData();
+    final String body = prepareRequestBody(ibanSource, ibanDestination, 0L);
+
+    //Act and Assert
+    given().contentType(ContentType.JSON).body(body).post(baseTransfersUri).then().
+        assertThat().statusCode(200);
+  }
+
+  @Test
+  public void testTransferWrongIban() throws JsonProcessingException {
+    //Arrange
+    final String ibanSource = "LT6000000000000000000001";
+    final String ibanFake = "LT6000000000000000000009";
+    final String body = prepareRequestBody(ibanSource, ibanFake, 0L);
+    arrangeTestData();
+
+    //Act and Assert
+    given().contentType(ContentType.JSON).body(body).post(baseTransfersUri).then().
+        assertThat().statusCode(400);
+  }
+
+  @Test
+  public void testTransferNotEnoughFunds() throws JsonProcessingException {
+    //Arrange
+    final String ibanSource = "LT6000000000000000000001";
+    final String ibanDestination = "LT6000000000000000000002";
+    final String body = prepareRequestBody(ibanSource, ibanDestination, 50L);
+    arrangeTestData();
+
+    //Act and Assert
+    given().contentType(ContentType.JSON).body(body).post(baseTransfersUri).then().
+        assertThat().statusCode(403);
+  }
+
+  private String prepareRequestBody(String ibanSource, String ibanDestination,
+      Long amountMoney)
+      throws JsonProcessingException {
     RequestTransferModel requestTransferModel = new RequestTransferModel();
-    requestTransferModel.setSource("LT601010012345678901");
-    requestTransferModel.setDestination("LT601010012345678902");
+    MonetaryAmount amount = Monetary.getDefaultAmountFactory().
+        setCurrency("USD").setNumber(amountMoney).create();
+    requestTransferModel.setSource(ibanSource);
+    requestTransferModel.setDestination(ibanDestination);
     requestTransferModel.setAmount(new MonetaryAmountModel(amount.getNumber().numberValue(
         BigDecimal.class), amount.getCurrency().getCurrencyCode()));
-    String body = objectMapper.writeValueAsString(requestTransferModel);
-
-    given().contentType(ContentType.JSON).body(body).post("http://localhost:8080/transfer").then()
-        .statusCode(200);
+    return objectMapper.writeValueAsString(requestTransferModel);
   }
 
   @After

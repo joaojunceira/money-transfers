@@ -26,7 +26,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestAccountsRepository {
 
-  @Inject
   private AccountRepository repository;
 
   @Before

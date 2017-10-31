@@ -13,12 +13,15 @@ public class TransferView {
   @Getter
   @Setter
   Long id;
+
   @Getter
   @Setter
   String source;
+
   @Getter
   @Setter
   String destination;
+
   @Getter
   @Setter
   MonetaryAmountModel amount;

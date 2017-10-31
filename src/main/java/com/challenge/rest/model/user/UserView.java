@@ -13,12 +13,15 @@ public class UserView {
   @Getter
   @Setter
   Long id;
+
   @Getter
   @Setter
   String firstName;
+
   @Getter
   @Setter
   String lastName;
+
   @Getter
   @Setter
   LocalDate birthDate;

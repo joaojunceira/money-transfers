@@ -11,7 +11,10 @@ public @Data
 class TransferResult {
 
   private Long id;
+
   private String source;
+
   private String destination;
+
   private MonetaryAmount amount;
 }

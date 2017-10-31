@@ -7,7 +7,6 @@ import com.challenge.domain.shared.exceptions.UserNotFoundException;
 import com.challenge.rest.model.user.CreateUserInput;
 import com.challenge.rest.model.user.UserView;
 import java.net.URI;
-import java.time.LocalDate;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -24,6 +23,8 @@ import javax.ws.rs.core.UriInfo;
 import org.modelmapper.ModelMapper;
 
 @Path("user")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserController {
 
   @Context
@@ -34,7 +35,6 @@ public class UserController {
   private ModelMapper modelMapper;
 
   @POST
-  @Consumes(MediaType.APPLICATION_JSON)
   public Response create(@NotNull CreateUserInput userModel) {
     UserCreationRequest request = new UserCreationRequest();
     modelMapper.map(userModel, request);
@@ -46,7 +46,6 @@ public class UserController {
 
   @GET
   @Path("{id}")
-  @Produces(MediaType.APPLICATION_JSON)
   public Response get(@NotNull @PathParam("id") final Long id) {
     UserDetail userDetail;
     try {

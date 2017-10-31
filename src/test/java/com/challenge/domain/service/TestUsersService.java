@@ -20,7 +20,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestUsersService {
 
-  @Inject
   private UserService userService;
 
   @Before
