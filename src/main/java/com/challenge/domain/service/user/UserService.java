@@ -2,7 +2,7 @@ package com.challenge.domain.service.user;
 
 public interface UserService {
 
-  UserDetail create(UserCreationRequest userDetail);
+  UserDetail create(final UserCreationRequest userDetail);
 
-  UserDetail get(Long id);
+  UserDetail get(final Long id);
 }

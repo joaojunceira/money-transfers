@@ -12,7 +12,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import java.time.LocalDate;
 import javax.inject.Inject;
-import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,6 +24,7 @@ public class TestAccountsService {
 
   @Inject
   private AccountService accountService;
+  @Inject
   private UserService userService;
 
   @Before
@@ -34,26 +34,38 @@ public class TestAccountsService {
     this.userService = injector.getInstance(UserService.class);
   }
 
-  @Test
-  public void testCreationAndGetOfAccount() {
+  private UserDetail createUser() {
     UserCreationRequest userCreationRequest = new UserCreationRequest();
     userCreationRequest.setFirstName("John");
     userCreationRequest.setLastName("Smith");
     userCreationRequest.setBirthDate(LocalDate.of(1970, 4, 1));
-    UserDetail user = userService.create(userCreationRequest);
+    return userService.create(userCreationRequest);
+  }
+
+  private AccountRequest prepareAccountEntity(UserDetail user) {
     AccountRequest request = new AccountRequest();
     request.setUserId(user.getId());
     request.setCurrency("EUR");
-    AccountDetail accountDetail = accountService.create(request);
+    return request;
+  }
+
+  @Test
+  public void testCreationAndGetOfAccount() {
+    //Arrange
+    UserDetail user = createUser();
+    AccountRequest requestObject = prepareAccountEntity(user);
+    //Act
+    AccountDetail accountDetail = accountService.create(requestObject);
+    AccountDetail accountDetailFromGet = accountService.get(accountDetail.getIban());
+    //Assert
     Assert.assertNotNull(accountDetail);
     Assert.assertNotNull(accountDetail.getBalance());
-    CurrencyUnit euro = Monetary.getCurrency("EUR");
-    Assert.assertEquals(accountDetail.getBalance().getCurrency(), euro);
+    Assert.assertEquals(accountDetail.getBalance().getCurrency(), Monetary.getCurrency("EUR"));
     Assert.assertNotNull(accountDetail.getIban());
     Assert.assertNotNull(accountDetail.getLastMovement());
     Assert.assertNotNull(accountDetail.getUser());
     Assert.assertNotNull(accountDetail.getId());
-    Assert.assertEquals(accountService.get(accountDetail.getIban()), accountDetail);
+    Assert.assertEquals(accountDetailFromGet, accountDetail);
   }
 
 }

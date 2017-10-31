@@ -13,8 +13,8 @@ import com.google.inject.Injector;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import javax.inject.Inject;
-import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import org.junit.Assert;
@@ -35,11 +35,10 @@ public class TestAccountsRepository {
     this.repository = injector.getInstance(AccountRepository.class);
   }
 
-  private Long createAccount() {
+  private Account createAccountEntity() {
     Account account = new Account();
-    CurrencyUnit usd = Monetary.getCurrency("USD");
     MonetaryAmount amount = Monetary.getDefaultAmountFactory().
-        setCurrency(usd).setNumber(100L).create();
+        setCurrency("USD").setNumber(100L).create();
     account.setBalance(amount);
     account.setIban("LT601010012345678901");
     User user = new User();
@@ -49,29 +48,46 @@ public class TestAccountsRepository {
     user.setBirthDate(LocalDate.of(1970, 4, 1));
     account.setUser(user);
     account.setLastMovement(LocalDateTime.now(Clock.systemUTC()));
-    Long id = repository.create(account);
-    return id;
+    return account;
   }
 
   @Test
   public void testAccountCreation() {
-    Long id = createAccount();
+    //Arrange
+    Account account = createAccountEntity();
+    //Act
+    Long id = repository.create(account);
+    //Assert
     Assert.assertThat("Id is generated correctly", id, greaterThanOrEqualTo(1L));
+  }
+
+  private Account prepareAccountRepository() {
+    Account accountEntity = createAccountEntity();
+    Long id = repository.create(accountEntity);
+    Optional<Account> account = repository.findById(id);
+    return account.get();
+  }
+
+  private Integer updateAccount(Account account) {
+    MonetaryAmount amount = Monetary.getDefaultAmountFactory().
+        setCurrency("USD").setNumber(100L).create();
+    account.setBalance(account.getBalance().add(amount));
+    return repository.update(account);
   }
 
   @Test
   public void testAccountBalanceChange() {
-    Long id = createAccount();
-    Account account = repository.findById(id);
-    CurrencyUnit usd = Monetary.getCurrency("USD");
-    MonetaryAmount amount = Monetary.getDefaultAmountFactory().
-        setCurrency(usd).setNumber(100L).create();
-    account.setBalance(account.getBalance().add(amount));
-    Assert.assertThat("is updated", repository.update(account), is(equalTo(1)));
-    account = repository.findById(id);
+    //Arrange
+    Account accountPrep = prepareAccountRepository();
     MonetaryAmount expectedAmount = Monetary.getDefaultAmountFactory().
-        setCurrency(usd).setNumber(200L).create();
-    Assert.assertEquals("amount balance expected", account.getBalance(), expectedAmount);
+        setCurrency("USD").setNumber(200L).create();
+    //Act
+    Integer updateResult = updateAccount(accountPrep);
+    Optional<Account> account = repository.findById(accountPrep.getId());
+    //Assert
+    Assert.assertThat("is updated", updateResult, is(equalTo(1)));
+    Assert.assertTrue(account.isPresent());
+    Assert.assertEquals("amount balance expected", account.get().getBalance(), expectedAmount);
   }
 
 

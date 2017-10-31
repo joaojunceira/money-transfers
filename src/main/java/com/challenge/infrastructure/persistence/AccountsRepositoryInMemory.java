@@ -2,13 +2,11 @@ package com.challenge.infrastructure.persistence;
 
 import com.challenge.domain.model.Account;
 import com.challenge.domain.repository.AccountRepository;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Stream;
 
-public class AccountRepositoryInMemory extends AccountRepository {
+public final class AccountsRepositoryInMemory extends AccountRepository {
 
   private final ConcurrentHashMap<Long, Account> dataStore = new ConcurrentHashMap<>();
   private final AtomicLong idCounter = new AtomicLong();
@@ -22,13 +20,13 @@ public class AccountRepositoryInMemory extends AccountRepository {
   }
 
   @Override
-  public Account findById(Long key) {
-    return dataStore.get(key);
+  public Optional<Account> findById(Long key) {
+    return Optional.ofNullable(dataStore.get(key));
   }
 
   @Override
-  public Iterable<Account> findAll() {
-    return dataStore.values();
+  public Optional<Iterable<Account>> findAll() {
+    return Optional.ofNullable(dataStore.values());
   }
 
   @Override
@@ -43,8 +41,8 @@ public class AccountRepositoryInMemory extends AccountRepository {
   }
 
   @Override
-  public Account findByIban(final String iban) {
-    return dataStore.values().stream().filter(a->a.getIban().equalsIgnoreCase(iban)).
-        findFirst().orElse(null);
+  public Optional<Account> findByIban(final String iban) {
+    return dataStore.values().stream().filter(a -> a.getIban().equalsIgnoreCase(iban)).
+        findFirst();
   }
 }

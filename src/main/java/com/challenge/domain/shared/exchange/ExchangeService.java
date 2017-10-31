@@ -5,5 +5,5 @@ import javax.money.MonetaryAmount;
 
 public interface ExchangeService {
 
-  MonetaryAmount exchange(MonetaryAmount amount, CurrencyUnit currencyDestination);
+  MonetaryAmount exchange(final MonetaryAmount amount, final CurrencyUnit currencyDestination);
 }
