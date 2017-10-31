@@ -9,8 +9,12 @@ public @Data
 class AccountDetail {
 
   private Long id;
+
   private String iban;
+
   private User user;
+
   private MonetaryAmount balance;
+
   private LocalDateTime lastMovement;
 }

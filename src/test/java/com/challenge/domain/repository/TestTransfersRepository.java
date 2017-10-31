@@ -23,7 +23,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestTransfersRepository {
 
-  @Inject
   private TransferRepository repository;
 
   @Before

@@ -11,7 +11,6 @@ import com.challenge.domain.service.user.UserService;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import java.time.LocalDate;
-import javax.inject.Inject;
 import javax.money.Monetary;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,9 +21,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestAccountsService {
 
-  @Inject
   private AccountService accountService;
-  @Inject
   private UserService userService;
 
   @Before

@@ -7,7 +7,10 @@ public @Data
 class UserDetail {
 
   private Long id;
+
   private String firstName;
+
   private String lastName;
+
   private LocalDate birthDate;
 }

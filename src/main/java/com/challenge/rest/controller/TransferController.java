@@ -33,7 +33,7 @@ public class TransferController {
   private ModelMapper modelMapper;
 
   @POST
-  public Response doTransfer(@NotNull final RequestTransferModel body) {
+  public Response doTransfer(@NotNull RequestTransferModel body) {
     TransferRequest request = new TransferRequest();
     modelMapper.map(body, request);
     request.setAmount(body.getAmount().getAmount());

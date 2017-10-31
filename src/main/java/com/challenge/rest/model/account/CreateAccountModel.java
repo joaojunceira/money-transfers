@@ -15,6 +15,8 @@ public class CreateAccountModel {
   @Getter
   @Setter
   Long userId;
+
+  @NotNull
   @Getter
   @Setter
   @Pattern(message = "Invalid Currency format, it should follow ISO 4217", regexp = "^[A-Z]{2}")

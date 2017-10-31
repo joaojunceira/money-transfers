@@ -8,11 +8,8 @@ import com.challenge.domain.shared.exceptions.DomainException;
 import com.challenge.rest.model.account.AccountView;
 import com.challenge.rest.model.account.CreateAccountModel;
 import com.challenge.rest.model.shared.MonetaryAmountModel;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.AbstractDateTimeDV;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.time.ZoneOffset;
-import java.util.Date;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -59,7 +56,6 @@ public class AccountController {
 
   @GET
   @Path("{iban}")
-  @Produces(MediaType.APPLICATION_JSON)
   public Response get(@NotNull @PathParam("iban") final String iban) {
     AccountDetail accountDetail;
     try {

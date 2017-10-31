@@ -19,7 +19,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestUserRepository {
 
-  @Inject
   private UserRepository repository;
 
   @Before

@@ -13,10 +13,12 @@ public class CreateUserInput {
   @Getter
   @Setter
   String firstName;
+
   @NotNull
   @Getter
   @Setter
   String lastName;
+
   @NotNull
   @Getter
   @Setter
