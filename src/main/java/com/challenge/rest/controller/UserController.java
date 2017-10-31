@@ -37,10 +37,7 @@ public class UserController {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response create(@NotNull CreateUserInput userModel) {
     UserCreationRequest request = new UserCreationRequest();
-    request.setBirthDate(LocalDate.ofEpochDay(userModel.getBirthDate().getTime()));
-    request.setFirstName(userModel.getFirstName());
-    request.setLastName(userModel.getLastName());
-    //modelMapper.map(userModel, request);
+    modelMapper.map(userModel, request);
     UserDetail userDetail = userService.create(request);
     URI resourceLocation = uriInfo.getAbsolutePathBuilder().path(String.valueOf(userDetail.getId()))
         .build();

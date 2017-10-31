@@ -79,7 +79,7 @@ public class AccountController {
     BigDecimal amount = accountDetail.getBalance().getNumber().numberValue(BigDecimal.class);
     accountModel.setBalance(new MonetaryAmountModel(amount,
         accountDetail.getBalance().getCurrency().getCurrencyCode()));
-    accountModel.setLastMovement(new Date(accountDetail.getLastMovement().toEpochSecond(ZoneOffset.UTC)));
+    accountModel.setLastMovement(accountDetail.getLastMovement());
     return accountModel;
   }
 
