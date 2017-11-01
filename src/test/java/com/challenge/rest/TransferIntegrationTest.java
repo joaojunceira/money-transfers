@@ -1,6 +1,9 @@
 package com.challenge.rest;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 
 import com.challenge.App;
 import com.challenge.rest.model.account.CreateAccountModel;
@@ -79,7 +82,12 @@ public class TransferIntegrationTest {
 
     //Act and Assert
     given().contentType(ContentType.JSON).body(body).post(baseTransfersUri).then().
-        assertThat().statusCode(200);
+        assertThat().statusCode(200)
+        .body("id", is(greaterThanOrEqualTo(1)))
+        .body("source", is(equalTo(ibanSource)))
+        .body("destination", is(equalTo(ibanDestination)))
+        .body("amount.amount", is(equalTo(0)))
+        .body("amount.currency", is(equalTo("USD")));
   }
 
   @Test
