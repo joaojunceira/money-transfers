@@ -5,60 +5,32 @@
 1. the datastore should run in-memory for the sake of this test;
 1. the final result should be executable as a standalone program (should not require a pre-installed container/server);
 1. demonstrate with tests that the API works as expected.
-## API Design
-* Transfer Money
 
-  Transfer money between two accounts inside of the same bank.
-  
-  * Request:
-  
+## [API Design](API.md)
 
-    POST \transfer
-    
-    ```json
-    { 
-       "source":"NL20RABO0132682018",
-       "destination":"NL96MHCB0630250242",
-       "amount":{  
-          "amount":59.95,
-          "currency":"EUR"
-       }
-    }
-    ```
-    
-  * Response:
-  
-    ** Success (200)
-   
-     ```json
-     {
-        "id":1200000
-     }
-     ```
-      
-     ** Bad request (400)
+Document with API design.
 
+## Discussion
 
-    Used to reject bad IBAN and Currency Codes format or non-suported Currency Codes. It might also apply to a non-existing IBAN. It will reply a message describing the failure.
-    
-    
-     ```json
-     {
-         "message":"Invalid IBAN format"
-     } 
-     ```
+* This solution have clean code practices based on SOLID principles;
+* Tests to all layers;
+* Executable Application using Jersey with self-contained Grizzly;
+* In Memory repositories;
+* To make it simple the transfers are not Transactional. 
+However to mitigate such problem in production scenario, it would be possible create a compensation action, if something fails.
 
-     ** Forbidden (403)
-   
-      
-    Not enough money to do transfer.
-      
-      
-      
-* Create Account
+## How to Run
 
-* Get Account details
+The application is built with Java 8 and Apache Maven.
 
-* Create User
+* Run Application
 
-* Get User and Accounts
+```
+mvn exec:java
+```
+
+* Run Tests
+
+```
+mvn clean compile test
+```
